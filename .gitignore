@@ -1,0 +1,113 @@
+
+# OS
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Icon?
+.Spotlight-V100
+.Trashes
+
+# Dependency directories
+**/node_modules/
+**/bower_components/
+**/.pnp
+**/.pnp.js
+
+# Package manager caches
+**/.npm
+**/.yarn/cache/
+**/.yarn/unplugged/
+**/.yarn/build-state.yml
+**/.yarn/install-state.gz
+**/.pnpm-store/
+
+# Logs
+**/logs/
+**/*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+
+# Build outputs / Artifacts
+**/dist/
+**/build/
+**/out/
+**/.next/
+**/.nuxt/
+**/.svelte-kit/
+**/.angular/
+**/.cache/
+**/.parcel-cache/
+**/.rollup.cache/
+**/.vite/
+
+# Coverage
+**/coverage/
+**/.nyc_output/
+
+# TypeScript
+**/*.tsbuildinfo
+
+# Environment files (keep examples)
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env*.example
+
+# IDE / Editor
+**/.vscode/
+**/.idea/
+**/.fleet/
+**/.history/
+**/*.code-workspace
+
+# Temp
+**/tmp/
+**/temp/
+**/~$*
+
+# Lint / Tool caches
+**/.eslintcache
+**/.stylelintcache
+**/.turbo/
+**/.cache-loader/
+**/.docusaurus/
+**/.serverless/
+**/.vercel/
+**/.firebase/
+
+# Databases (local/dev)
+**/*.sqlite
+**/*.sqlite3
+**/*.db
+**/*.db-wal
+**/*.db-shm
+
+# Python (in case of mixed-language examples)
+**/__pycache__/
+**/*.py[cod]
+**/.Python
+**/env/
+**/venv/
+**/.venv/
+**/ENV/
+**/env.bak/
+**/.ipynb_checkpoints
+
+# Java / JVM
+**/target/
+**/*.class
+**/.gradle/
+**/.mvn/
+
+# .NET
+**/bin/
+**/obj/
+
+# Rust
+**/target/
+
+
+
