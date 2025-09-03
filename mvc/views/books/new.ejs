@@ -1,0 +1,20 @@
+<%- include('../partials/header', { title }) %>
+<div class="card">
+  <h2>New Book</h2>
+  <% if (errors) { %>
+    <p class="error">❌ <%= errors %></p>
+  <% } %>
+  <form method="post" action="/books">
+    <label for="title">Title</label>
+    <input id="title" name="title" value="<%= values.title || '' %>" />
+
+    <label for="author">Author</label>
+    <input id="author" name="author" value="<%= values.author || '' %>" />
+
+    <div style="margin-top:12px;">
+      <button class="btn" type="submit">Create</button>
+      <a class="btn btn-secondary" href="/books" style="margin-left:8px;">Cancel</a>
+    </div>
+  </form>
+</div>
+<%- include('../partials/footer') %>

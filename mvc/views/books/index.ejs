@@ -1,0 +1,14 @@
+<%- include('../partials/header', { title }) %>
+<div class="card">
+  <h2>Books</h2>
+  <ul>
+    <% books.forEach(b => { %>
+      <li>
+        <a href="/books/<%= b.id %>"><%= b.title %></a>
+        <span style="color:#6b7280">by <%= b.author %></span>
+      </li>
+    <% }) %>
+  </ul>
+  <div style="margin-top:12px;"><a class="btn" href="/books/new">+ New Book</a></div>
+</div>
+<%- include('../partials/footer') %>
