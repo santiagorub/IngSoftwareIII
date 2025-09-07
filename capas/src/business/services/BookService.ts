@@ -6,7 +6,7 @@
  */
 
 import { Book } from '../entities/Book';
-import { IBookRepository } from '../../data/repositories/IBookRepository';
+import { IBookRepository } from '../../data/interfaces/IBookRepository';
 import { BookSearchFilters } from '../../data/models/DataModels';
 
 export class BookService {

@@ -8,7 +8,7 @@
 import { Loan, LoanStatus } from '../entities/Loan';
 import { User } from '../entities/User';
 import { Book } from '../entities/Book';
-import { ILoanRepository } from '../../data/repositories/ILoanRepository';
+import { ILoanRepository } from '../../data/interfaces/ILoanRepository';
 import { BookService } from './BookService';
 import { UserService } from './UserService';
 

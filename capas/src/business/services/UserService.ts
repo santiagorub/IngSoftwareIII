@@ -5,7 +5,7 @@
  */
 
 import { User, UserType } from '../entities/User';
-import { IUserRepository } from '../../data/repositories/IUserRepository';
+import { IUserRepository } from '../../data/interfaces/IUserRepository';
 
 export interface CreateUserRequest {
   email: string;

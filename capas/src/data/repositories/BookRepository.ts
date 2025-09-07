@@ -8,7 +8,7 @@
 import { getDatabase } from '../../config/database';
 import { BookSearchFilters } from '../models/DataModels';
 import { Book } from '../../business/entities/Book';
-import { IBookRepository } from './IBookRepository';
+import { IBookRepository } from '../interfaces/IBookRepository';
 import { v4 as uuidv4 } from 'uuid';
 import mysql from 'mysql2/promise';
 

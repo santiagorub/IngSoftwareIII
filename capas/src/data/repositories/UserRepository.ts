@@ -6,7 +6,7 @@
 
 import { getDatabase } from '../../config/database';
 import { User, UserType } from '../../business/entities/User';
-import { IUserRepository } from './IUserRepository';
+import { IUserRepository } from '../interfaces/IUserRepository';
 import { v4 as uuidv4 } from 'uuid';
 import mysql from 'mysql2/promise';
 

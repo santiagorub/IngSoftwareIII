@@ -33,31 +33,31 @@ import { UserController } from './presentation/controllers/UserController';
  * Configuración de la aplicación con inyección de dependencias
  */
 function createApp() {
-  const app = express();
+    const app = express();
 
-  // Middleware básico
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+    // Middleware básico
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
 
-  // CORS simple para desarrollo
-  app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    if (req.method === 'OPTIONS') {
-      res.sendStatus(200);
-    } else {
-      next();
-    }
-  });
+    // CORS simple para desarrollo
+    app.use((req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        if (req.method === 'OPTIONS') {
+            res.sendStatus(200);
+        } else {
+            next();
+        }
+    });
 
-  // INYECCIÓN DE DEPENDENCIAS - Construcción de la arquitectura en capas
+    // INYECCIÓN DE DEPENDENCIAS - Construcción de la arquitectura en capas
 
-  // 1. CAPA DE DATOS - Instanciar repositorios MySQL
-  console.log('🗃️ Using MySQL repositories');
-  const bookRepository = new BookRepository();
-  const userRepository = new UserRepository();
-  // Sin préstamos en la versión simplificada
+    // 1. CAPA DE DATOS - Instanciar repositorios MySQL
+    console.log('🗃️ Using MySQL repositories');
+    const bookRepository = new BookRepository();
+    const userRepository = new UserRepository();
+    // Sin préstamos en la versión simplificada
 
     // 2. CAPA DE NEGOCIO - Inyectar repositorios en servicios
     const bookService = new BookService(bookRepository);
@@ -99,7 +99,7 @@ function createApp() {
             endpoints: {
                 api: '/api',
                 books: '/api/books',
-                users: '/api/users'
+                users: '/api/users',
             },
             examples: {
                 searchBooks: 'GET /api/books?title=java&isAvailable=true',
@@ -134,27 +134,27 @@ function createApp() {
  * Función para arrancar el servidor
  */
 async function startServer() {
-  console.log('🔧 Initializing MySQL database connection...');
-  initializeDatabase();
-  
-  const connected = await testConnection();
-  if (!connected) {
-    console.error('❌ Could not connect to MySQL database. Please check Docker is running.');
-    console.error('💡 Run: npm run docker:up');
-    process.exit(1);
-  }
-  
-  const app = createApp();
-  const PORT = process.env.PORT || 3000;
-  
-  startAppServer(app, PORT);
+    console.log('🔧 Initializing MySQL database connection...');
+    initializeDatabase();
+
+    const connected = await testConnection();
+    if (!connected) {
+        console.error('❌ Could not connect to MySQL database. Please check Docker is running.');
+        console.error('💡 Run: npm run docker:up');
+        process.exit(1);
+    }
+
+    const app = createApp();
+    const PORT = process.env.PORT || 3000;
+
+    startAppServer(app, PORT);
 }
 
 /**
  * Inicia el servidor Express
  */
 function startAppServer(app: express.Express, PORT: string | number) {
-  app.listen(PORT, () => {
+    app.listen(PORT, () => {
         console.log('🚀 Library Management System Started!');
         console.log(`📚 Server running on http://localhost:${PORT}`);
         console.log('');
@@ -188,10 +188,10 @@ function startAppServer(app: express.Express, PORT: string | number) {
 
 // Arrancar la aplicación si este archivo se ejecuta directamente
 if (require.main === module) {
-  startServer().catch(error => {
-    console.error('Failed to start server:', error);
-    process.exit(1);
-  });
+    startServer().catch((error) => {
+        console.error('Failed to start server:', error);
+        process.exit(1);
+    });
 }
 
 export { createApp, startServer };
