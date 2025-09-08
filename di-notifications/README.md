@@ -15,6 +15,8 @@ npm run dev
 
 - POST `/coupled/notify` → Servicio acoplado (sin DI)
 - POST `/di/notify` → Servicio con inyección de dependencias (DI)
+- POST `/di/notify/email` y `/di/notify/telegram` → DI con rutas explícitas
+- POST `/factory/notify/email` y `/factory/notify/telegram` → Factory Method
 
 Body de ejemplo (ambos endpoints):
 
@@ -42,6 +44,17 @@ curl -X POST http://localhost:4000/di/notify \
   -d '{"channel":"telegram","to":"@usuario","message":"Hola por Telegram"}'
 ```
 
+Factory Method:
+```bash
+curl -X POST http://localhost:4000/factory/notify/email \
+  -H 'Content-Type: application/json' \
+  -d '{"to":"user@example.com","message":"Hola Factory Email"}'
+
+curl -X POST http://localhost:4000/factory/notify/telegram \
+  -H 'Content-Type: application/json' \
+  -d '{"to":"@usuario","message":"Hola Factory Telegram"}'
+```
+
 ## ¿Qué demuestra?
 
 - Acoplado (sin DI): `CoupledNotificationService` crea las dependencias dentro (new EmailChannel/TelegramChannel). Cambiar, testear o extender obliga a tocar la clase.
@@ -57,8 +70,10 @@ src/
 │   ├── EmailChannel.ts
 │   ├── TelegramChannel.ts
 │   └── types.ts               # Interfaz NotificationChannel
-├── factories/
-│   └── channelFactory.ts      # Selecciona implementación según "channel"
+├── factory/                   # Factory Method (creadores concretos)
+│   ├── NotificationSender.ts
+│   ├── EmailNotificationSender.ts
+│   └── TelegramNotificationSender.ts
 └── services/
     ├── CoupledNotificationService.ts  # Sin DI (acoplado)
     └── NotificationService.ts         # Con DI (acepta una abstracción)
