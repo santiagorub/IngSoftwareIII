@@ -1,0 +1,107 @@
+version: "3.9"
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.1
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.1
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: userdb
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./infra/mysql-init:/docker-entrypoint-initdb.d
+
+  mongo:
+    image: mongo:6
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  mongo-rs-init:
+    image: mongo:6
+    depends_on:
+      mongo:
+        condition: service_healthy
+    entrypoint: ["bash", "-lc", "mongosh --quiet --host mongo:27017 --eval 'try{rs.status()}catch(e){rs.initiate({_id: \"rs0\", members: [{ _id: 0, host: \"mongo:27017\" }]})}' || true"]
+
+  gateway:
+    build: ./gateway
+    depends_on:
+      - kafka
+    environment:
+      - NODE_ENV=production
+      - KAFKA_BROKERS=kafka:9092
+      - PORT=8080
+    ports:
+      - "8080:8080"
+
+  user-service:
+    build: ./services/user-service
+    depends_on:
+      - kafka
+      - mysql
+    environment:
+      - NODE_ENV=production
+      - KAFKA_BROKERS=kafka:9092
+      - DATABASE_URL=mysql://root:root@mysql:3306/userdb
+      - SEED=true
+
+  product-service:
+    build: ./services/product-service
+    depends_on:
+      - kafka
+      - mongo
+    environment:
+      - NODE_ENV=production
+      - KAFKA_BROKERS=kafka:9092
+      - DATABASE_URL=mongodb://mongo:27017/productdb?replicaSet=rs0&directConnection=true
+      - SEED=true
+
+  cart-service:
+    build: ./services/cart-service
+    depends_on:
+      - kafka
+      - mysql
+    environment:
+      - NODE_ENV=production
+      - KAFKA_BROKERS=kafka:9092
+      - DATABASE_URL=mysql://root:root@mysql:3306/cartdb
+      - SEED=true
+
+volumes:
+  mysql_data: {}
+  mongo_data: {}
+
+
