@@ -9,7 +9,8 @@
     "dev": "tsx watch src/index.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
-    "seed": "node dist/seed.js"
+    "seed": "node dist/seed.js",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\""
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.12",
+    "prettier": "^3.3.3",
     "prisma": "^5.19.1",
     "tsx": "^4.19.2",
     "typescript": "^5.5.4"
