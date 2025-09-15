@@ -1,18 +1,19 @@
-const { tables } = require('../data/database');
 const Order = require('../models/Order');
 
-let orderIdCounter = 1;
-
 class OrderService {
-    async createOrder({ userId, items, paymentMethod, shippingAddress }) {
-        const user = tables.users.find((u) => u.id === userId);
+    constructor(orderRepository) {
+        this.orderRepo = orderRepository;
+    }
+
+    async createOrder({ userId, items, paymentMethod, shippingAddress, users, products }) {
+        const user = users.find((u) => u.id === userId);
         if (!user) {
             throw new Error('User not found');
         }
 
         const materialized = [];
         for (const it of items) {
-            const product = tables.products.find((p) => p.id === it.productId);
+            const product = products.find((p) => p.id === it.productId);
             if (!product) throw new Error('Product not found: ' + it.productId);
             materialized.push({
                 productId: product.id,
@@ -23,9 +24,9 @@ class OrderService {
             });
         }
 
-        let total = 0;
-        for (const mi of materialized) total += mi.lineTotal;
+        let total = materialized.reduce((sum, mi) => sum + mi.lineTotal, 0);
 
+        // ⚠️ todavía con switch, se sacará en Parte C
         let payment;
         switch (paymentMethod) {
             case 'credit_card':
@@ -39,9 +40,8 @@ class OrderService {
                 payment = { method: 'unknown' };
         }
 
-        const id = 'o' + orderIdCounter++;
         const order = new Order({
-            id,
+            id: null, // repo asigna id
             userId,
             items: materialized,
             total: Math.round(total * 100) / 100,
@@ -50,16 +50,15 @@ class OrderService {
             shippingAddress,
         });
 
-        tables.orders.push(order);
-        return order;
+        return this.orderRepo.store(order);
     }
 
     async listOrders() {
-        return tables.orders;
+        return this.orderRepo.all();
     }
 
     async findOrderById(id) {
-        return tables.orders.find((o) => o.id === id) || null;
+        return this.orderRepo.findById(id);
     }
 }
 
