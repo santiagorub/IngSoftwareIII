@@ -1,0 +1,25 @@
+{
+  "name": "patterns-class",
+  "version": "1.0.0",
+  "description": "Mini proyecto para clase: sistema funcional con implementaciones mejorables de patrones (DAO, Repository, DI, Factory, Builder)",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "architecture",
+    "patterns",
+    "teaching"
+  ],
+  "author": "",
+  "license": "MIT",
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "printWidth": 120,
+    "tabWidth": 4
+  }
+}
+
