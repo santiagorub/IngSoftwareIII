@@ -1,12 +1,10 @@
 const { connect, disconnect, tables } = require('./data/database');
-const InMemoryOrderDAO = require('./dao/InMemoryOrderDAO');
-const OrderRepository = require('./repositories/OrderRepository');
-const OrderService = require('./services/OrderService');
+const buildApp = require('./app/assembler');
 
 async function main() {
     await connect();
 
-    // Seed
+    // Seed de datos
     if (tables.users.length === 0) {
         tables.users.push({ id: 'u1', name: 'Ana', email: 'ana@example.com' });
         tables.users.push({ id: 'u2', name: 'Luis', email: 'luis@example.com' });
@@ -18,12 +16,8 @@ async function main() {
         tables.products.push({ id: 'p3', name: 'Molinillo manual', price: 35 });
     }
 
-    // --- Nuevo ensamblado ---
-    let counter = 1;
-    const idGenerator = () => counter++;
-    const dao = new InMemoryOrderDAO();
-    const repo = new OrderRepository(dao, idGenerator);
-    const orderService = new OrderService(repo);
+    // --- Ensamblar dependencias ---
+    const { orderService } = buildApp();
 
     console.log('Productos disponibles:');
     for (const p of tables.products) {
@@ -39,8 +33,6 @@ async function main() {
         ],
         paymentMethod: 'credit_card',
         shippingAddress: { street: 'Calle 123', city: 'CABA', zip: '1000' },
-        users: tables.users,
-        products: tables.products,
     });
 
     console.log('Pedido creado:', created);

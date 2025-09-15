@@ -1,19 +1,21 @@
 const Order = require('../models/Order');
 
 class OrderService {
-    constructor(orderRepository) {
+    constructor({ orderRepository, users, products }) {
         this.orderRepo = orderRepository;
+        this.users = users;
+        this.products = products;
     }
 
-    async createOrder({ userId, items, paymentMethod, shippingAddress, users, products }) {
-        const user = users.find((u) => u.id === userId);
+    async createOrder({ userId, items, paymentMethod, shippingAddress }) {
+        const user = this.users.find((u) => u.id === userId);
         if (!user) {
             throw new Error('User not found');
         }
 
         const materialized = [];
         for (const it of items) {
-            const product = products.find((p) => p.id === it.productId);
+            const product = this.products.find((p) => p.id === it.productId);
             if (!product) throw new Error('Product not found: ' + it.productId);
             materialized.push({
                 productId: product.id,
@@ -26,7 +28,7 @@ class OrderService {
 
         let total = materialized.reduce((sum, mi) => sum + mi.lineTotal, 0);
 
-        // ⚠️ todavía con switch, se sacará en Parte C
+        // ⚠️ Todavía con switch, se sacará en Parte C
         let payment;
         switch (paymentMethod) {
             case 'credit_card':
