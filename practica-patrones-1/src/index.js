@@ -1,26 +1,18 @@
-const { connect, disconnect, tables } = require('./data/database');
+const { connect, disconnect, getPool } = require('./data/database');
 const OrderService = require('./services/OrderService');
 
 async function main() {
     await connect();
 
-    // Seed de datos muy simple
-    if (tables.users.length === 0) {
-        tables.users.push({ id: 'u1', name: 'Ana', email: 'ana@example.com' });
-        tables.users.push({ id: 'u2', name: 'Luis', email: 'luis@example.com' });
-    }
-
-    if (tables.products.length === 0) {
-        tables.products.push({ id: 'p1', name: 'Café en grano 1kg', price: 20 });
-        tables.products.push({ id: 'p2', name: 'Filtro papel x100', price: 6 });
-        tables.products.push({ id: 'p3', name: 'Molinillo manual', price: 35 });
-    }
+    // Datos ya vienen del seed SQL (db/init.sql)
+    const pool = getPool();
+    const products = await pool.query('SELECT id, name, price FROM products ORDER BY id');
 
     const orderService = new OrderService();
 
     console.log('Productos disponibles:');
-    for (const p of tables.products) {
-        console.log(`- ${p.id} | ${p.name} | $${p.price}`);
+    for (const p of products.rows) {
+        console.log(`- ${p.id} | ${p.name} | $${Number(p.price)}`);
     }
 
     console.log('\nCreando pedido para Ana (u1)...');

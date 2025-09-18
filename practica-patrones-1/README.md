@@ -1,28 +1,55 @@
 # Actividad en clase: Refactorizando patrones de diseño en un sistema funcional
 
-## Setup rápido
+## Setup rápido (con base de datos real en Docker)
 
-Requisitos: Node 18+ instalado.
+Requisitos: Node 18+ y Docker/Docker Compose instalados.
 
+1) Levantar Postgres (seeder automático):
 ```bash
-cd patterns-class
+cd practica-patrones-1
+docker compose up -d
+```
+
+2) Instalar dependencias Node:
+```bash
+npm install
+```
+
+3) Ejecutar demo:
+```bash
 npm start
 ```
 
-Deberían ver en consola la creación de un pedido y un listado de pedidos.
+Deberías ver: conexión a Postgres, listado de productos (desde la DB), creación de un pedido y su posterior listado.
 
-## Código base (intencionalmente "mejorable")
+## Código base
 
 Dominio: tienda de café. Directorios clave:
 
--   `src/data/database.js`: "DB" en memoria con tablas globales y logs.
+-   `src/data/database.js`
 -   `src/services/OrderService.js`
 -   `src/models/*.js`: modelos simples (`User`, `Product`, `Order`).
--   `src/index.js`: arranque, seed simple y demo.
+-   `src/index.js`: arranque, lee productos desde Postgres y corre la demo.
+
+### Configuración de base de datos
+
+- Archivo `docker-compose.yml` levanta un Postgres 16 con DB `coffee_store` y usuario `app/app`.
+- Script `db/init.sql` crea tablas: `users`, `products`, `orders`, `order_items` y hace un seed mínimo.
+- Variables de conexión (con defaults):
+  - `DB_HOST=localhost`
+  - `DB_PORT=5432`
+  - `DB_USER=app`
+  - `DB_PASSWORD=app`
+  - `DB_NAME=coffee_store`
+
+Si necesitás parar y limpiar los datos:
+```bash
+docker compose down -v
+```
 
 ## Consigna
 
-Trabajen en parejas. Refactoricen progresivamente manteniendo el sistema funcionando en cada paso. No es necesario completar todo si no llegás: prioricen decisiones que reduzcan acoplamiento y mejoren claridad.
+Trabajen en parejas o solo. Refactoricen progresivamente manteniendo el sistema funcionando en cada paso. No es necesario completar todo si no llegás: prioricen decisiones que reduzcan acoplamiento y mejoren claridad.
 
 ### Parte A — DAO y Repository
 

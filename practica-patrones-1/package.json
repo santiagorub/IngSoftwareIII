@@ -20,6 +20,9 @@
     "arrowParens": "always",
     "printWidth": 120,
     "tabWidth": 4
+  },
+  "dependencies": {
+    "pg": "^8.11.5"
   }
 }
 
