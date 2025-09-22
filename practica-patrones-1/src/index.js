@@ -1,10 +1,10 @@
 const { connect, disconnect, tables } = require('./data/database');
-const buildApp = require('./app/assembler');
+const OrderService = require('./services/OrderService');
 
 async function main() {
     await connect();
 
-    // Seed de datos
+    // Seed de datos muy simple
     if (tables.users.length === 0) {
         tables.users.push({ id: 'u1', name: 'Ana', email: 'ana@example.com' });
         tables.users.push({ id: 'u2', name: 'Luis', email: 'luis@example.com' });
@@ -20,8 +20,8 @@ async function main() {
     const { orderService } = buildApp();
 
     console.log('Productos disponibles:');
-    for (const p of tables.products) {
-        console.log(`- ${p.id} | ${p.name} | $${p.price}`);
+    for (const p of products.rows) {
+        console.log(`- ${p.id} | ${p.name} | $${Number(p.price)}`);
     }
 
     console.log('\nCreando pedido para Ana (u1)...');

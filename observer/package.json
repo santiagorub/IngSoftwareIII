@@ -1,0 +1,14 @@
+{
+  "name": "strategy",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "tsx ecommerce.ts",
+    "build": "tsc",
+    "start:built": "node dist/ecommerce.js"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
