@@ -66,3 +66,5 @@ procesador.procesarPago();
 // Finalmente, intenta con MercadoPago
 procesador.setMetodoDePago(MetodoDePago.MERCADOPAGO);
 procesador.procesarPago();
+
+export {};
